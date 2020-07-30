@@ -1,0 +1,135 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+    <head>
+        <title>福建省高考成绩查询</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="/scripts/MD5.js"></script>
+        <style type="text/css">
+            .btn_input{
+                border:1px solid #b5c2d1;
+                height:22px;
+            }
+            .btn_botton{
+                background:#e4ecf8;
+                border:1px solid #b5c2d1;
+                padding-top:2px;
+            }
+            .STYLE1 {
+                color: #000000;
+                font-family: "黑体";
+                font-size: 22px;
+                font-weight:bold;
+            }
+        </style>
+    </head>
+    <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+        <br><br><br><br>
+
+        <table id="_01"  height="431" border="0" cellpadding="0" cellspacing="0" align="center">
+            <tr>
+                <td height="84" colspan="3">
+                    <!--span class="STYLE1"><font color=red>2020年6月24日前本系统处于测试阶段，所展现及填报
+        的数据均无效！</font></span><br-->
+                    <span class="STYLE1">&nbsp;福建省2020年普通高校招生统一考试成绩查询</span></td>
+            </tr>
+            <tr>
+                <td width="365" height="310" valign="top" align="center">
+                    <br><form name="gkcjForm" method="post" action="/gkcj.shtml">
+                    <input type="hidden" name="method" value="query">
+                    <table width="365" height="140" border="0">
+                        <tr>
+                            <td  width="34%" height="40" align="left"><div align="right">帐号：</div></td>
+                            <td width="66%"><INPUT type="text" name="logname" id="logname" value="" maxlength="30" style="width:60%">
+                        </tr>
+                        <tr>
+                            <td  width="34%" height="40" align="left"><div align="right">密码：</div></td>
+                            <td width="66%"><INPUT type="password" name="pwd" id="pwd" value="" style="width:60%" maxlength="30">
+                        </tr>
+                        <tr>
+                            <td width="34%" height="40" align="left"><div align="right">考生号：</div></td>
+                            <td width="66%"><input type="text" name="ksh" value="" style="width:60%"></td>
+                        </tr>
+                        <tr>
+                            <td></td><td ><font size="2px" color="red">注释：此登录帐号和密码与高考报名<br>管理系统登录密码一致</font></td>
+                        </tr>
+
+                        <tr>
+                            <td  width="34%" height="40" align="left"><div align="right">验证码:</div></td>
+                            <td width="66%"><INPUT class=btn_input name="check" id="check" value="" size=4 maxlength="6">
+                                <label id="picpark"><script>document.write("<img src='/radomImage?x="+new Date().getTime()+"'/>")</script></label>
+                                <a onclick="otherpic()" style="cursor:hand;font-size:12"/>看不清图片</a></td>
+                        </tr>
+                        <tr>
+                            <td height="48" colspan="2" align="center">
+
+                                <input type="button" name="findbtn" id="findbtn" value="查询">
+
+                                <input type="button" name="restbtn" id="restbtn" value=" 重置 " onClick="rest()">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                </td>
+            </tr>
+            <tr>
+                <td height="40" colspan="3" align="center" style="border-top:2px solid #cecece;font-size:12px;"><a href="http://www.eeafj.cn">福建省教育考试院官方网（www.eeafj.cn）</a>版权所有&nbsp; <br>闽ICP备10029713号</td>
+            </tr>
+            <tr>
+                <td height="40" colspan="3" align="center" style="font-size:12px;">地址：福建省福州市北环中路59号  邮编：350003</td>
+            </tr>
+            <tr>
+                <td height="40" colspan="3" align="center" style="font-size:12px;">(建议IE8,1024×768以上分辨率浏览本网站，技术支持电话：87856627)</td>
+            </tr>
+        </table>
+
+        <script type="text/javascript">
+            var pattern = /^\d{1,}$/;
+            String.prototype.trim = function(){
+                return this.replace(/　/g," ").replace(/ /g, "");
+            }
+            function init(){
+                var err = "";
+                if(err!=""){
+                    if(err=="1"){
+                        alert("考生号或密码错误");
+                        document.getElementById("pwd").value="";
+                        return false;
+                    }else if(err=="2"){
+                        alert("验证码输入错误");
+                        document.getElementById("pwd").value="";
+                        return false;
+                    }
+                }
+            }
+            function rest(){
+                document.forms[0].ksh.value="";
+                document.getElementById("pwd").value="";
+                //document.getElementById("check").value="";
+                document.getElementById("logname").value="";
+            }
+            function otherpic(){
+                var date = new Date();
+                document.all.picpark.innerHTML="<img src='/radomImage?x="+date.getTime()+"'/>";
+            }
+
+            init();
+        </script>
+
+    </body>
+</html>

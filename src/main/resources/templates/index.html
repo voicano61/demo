@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>SpringBoot模版渲染</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <table>
+            <tr th:each="user:${userList}"> 
+                <td th:text="${user.getId()}"/>
+                <td th:text="${user.getUsername()}"/>
+                <td th:text="${user.getPassword()}"/>
+            </tr>
+        </table>
+        <button onclick="window.location.href='http://localhost:8080/test/showInfo'">修改</button>
+    </body>
+</html>

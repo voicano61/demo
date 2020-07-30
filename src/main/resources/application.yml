@@ -1,0 +1,69 @@
+#spring.application.name=demo
+#
+#management.endpoints.jmx.exposure.include=*
+#management.endpoints.web.exposure.include=*
+#management.endpoint.health.show-details=always
+
+
+# spring cloud access&secret config
+# 可以访问如下地址查看: https://usercenter.console.aliyun.com/#/manage/ak
+#alibaba.cloud.access-key=****
+#alibaba.cloud.secret-key=****
+
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+# Actuator Web 访问端口
+#management.server.port=8081
+#
+#mybatis.mapper-locations=classpath:mapper/*Mapper.xml
+#mybatis.type-aliases-package=com.example.demo.dao
+
+#
+#server:port: 8080
+#author:
+#  name: xxx
+#  url: https://xxx.com
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      additional-exclude: WEB-INF/**
+  freemarker:
+    cache: false
+
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
+  thymeleaf:
+    suffix: .html
+    prefix: classpath:/templates/
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    timeout: 3000
+    jedis:
+      pool:
+        max-idle: 20
+        max-active: 100
+        max-wait: 30000
+        min-idle: 0
+
+mybatis:
+  type-aliases-package: com.example.demo.pojo
+  mapper-locations: classpath:mapper/*.xml
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  page-size-zero: true
+  

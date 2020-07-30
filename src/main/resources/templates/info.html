@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <script>
+        $("#username").bind('input propertychange',function(){
+            var username=document.getElementById("username").value
+            $.ajax({
+                url:"/test/decide",
+                type:"post",
+                data:
+                    {
+                        "username":username
+                    },
+                success:function (result) {
+                    if (result == "error") {
+                        document.getElementById("sub").disabled = true;
+                        alert("用户名存在")
+                    } else {
+                        document.getElementById("sub").disabled = false;
+                    }
+                }
+                        
+                })
+        });
+    
+    </script>
+    <body>
+        <form action="/test/update" method="post">
+            用户名：<input th:value="${username}" id="username" name="username"onchange="decide()">
+            密码：<input th:value="${password}" id="passowrd" name="password">
+            <button type="submit">提交</button>
+        </form>
+       
+    </body>
+</html>
