@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <script>
+        function sub(ths) {
+            var $td = $(ths).parent().parent().children();
+            var nid = $td.eq(0).text();
+            var bookName=$td.eq(1).text();
+            var author=$td.eq(2).text();
+            $.ajax({
+                url:"/test/borrowBook",
+                type:"post",
+                data:
+                    {
+                        "bookId":nid,
+                        "bookName":bookName,
+                        "author":author
+                    },
+                success: function (result) {
+                }
+        });
+        }
+    </script>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">图书</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="/test/showBook">借阅图书</a></li>
+                        <li><a href="#">我的借阅</a></li>
+                        <li><a href="#">待归还</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book:${bookList}">
+                <td th:text="${book.getId()}"  style="display:none">
+                <td th:text="${book.getBookName()}"/>
+                <td th:text="${book.getAuthor()}"/>
+                <td th:text="${book.getNumber()}"/>
+                <td><button type="button" class="btn btn-primary"
+                            data-toggle="button" id="button" onclick="sub(this)"> 借阅
+                </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>

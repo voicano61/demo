@@ -8,13 +8,13 @@
         <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <table>
-            <tr th:each="user:${userList}"> 
-                <td th:text="${user.getId()}"/>
-                <td th:text="${user.getUsername()}"/>
-                <td th:text="${user.getPassword()}"/>
-            </tr>
-        </table>
+<!--        <table>-->
+<!--            <tr th:each="user:${userList}"> -->
+<!--                <td th:text="${user.getId()}"/>-->
+<!--                <td th:text="${user.getUsername()}"/>-->
+<!--                <td th:text="${user.getPassword()}"/>-->
+<!--            </tr>-->
+<!--        </table>-->
         <button onclick="window.location.href='http://localhost:8080/test/showInfo'">修改</button>
     </body>
 </html>

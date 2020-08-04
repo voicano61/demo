@@ -3,6 +3,8 @@ package com.example.demo.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Description:
  */
 @Configuration
+@ConfigurationProperties(prefix = "spring.redis")
+@ConditionalOnProperty(name = {"spring.redis.host"})
 @EnableCaching //开启注解
 public class RedisConfig extends CachingConfigurerSupport {
 

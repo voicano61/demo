@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.pojo.Book">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="bookname" jdbcType="VARCHAR" property="bookname" />
+        <result column="author" jdbcType="VARCHAR" property="author" />
+        <result column="number" jdbcType="VARCHAR" property="number" />
+    </resultMap>
+    <select id="selAllBook" resultType="com.example.demo.pojo.Book">
+        select * from book;
+    </select>
+    <select id="selBook" resultType="com.example.demo.pojo.Book">
+        select * from book where number>0;
+    </select>
+    <update id="updateNumber" parameterType="Integer">
+        update book set number=number-1 where id=#{id}
+    </update>
+</mapper>

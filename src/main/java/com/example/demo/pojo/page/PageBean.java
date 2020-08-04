@@ -1,12 +1,13 @@
 package com.example.demo.pojo.page;
 
+import com.example.demo.pojo.Book;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.user.DataBean;
 import com.github.pagehelper.PageInfo;
 
 public class PageBean {
     private int resultCode;
-    private PageInfo<User> pageInfo;
+    private PageInfo<Book> pageInfo;
     private String resultString;
 
     public int getResultCode() {
@@ -17,11 +18,11 @@ public class PageBean {
         this.resultCode = resultCode;
     }
 
-    public PageInfo<User> getPageInfo() {
+    public PageInfo<Book> getPageInfo() {
         return pageInfo;
     }
 
-    public void setPageInfo(PageInfo<User> pageInfo) {
+    public void setPageInfo(PageInfo<Book> pageInfo) {
         this.pageInfo = pageInfo;
     }
 

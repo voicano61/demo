@@ -3,53 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
     <script type="text/javascript">
         // function submit() {
-        //     var username=document.getElementById("name").value
+        //     var username=document.getElementById("username").value
         //     var password=document.getElementById("password").value
         //     if(username==""||username==null||password==""||password==null)
         //     {
         //         alert("用户信息填写不完整!");
-        //         // document.getElementById("sub").disabled=true;
+        //         document.getElementById("sub").disabled=true;
         //         return false;
         //     }
         //     else
         //     {
         //         return true;
-        //         document.getElementById("sub").disabled=false;
-        //         $.ajax({
-        //             url:"/test/login",
-        //             type:"post",
-        //             data:
-        //                 {
-        //                     "name":username,
-        //                     "password":password
-        //                 },
-        //             success:function (result) {
-        //                 if(result=="success")
-        //                 {
-        //                     alert("登录成功");
-        //                 }
-        //                 else
-        //                 {
-        //                     alert("账户密码错误!")
-        //                 }
-        //
-        //             }
-        //         })
+        //         // $.ajax({
+        //         //     url:"/test/login",
+        //         //     type:"post",
+        //         //     data:
+        //         //         {
+        //         //             "name":username,
+        //         //             "password":password
+        //         //         },
+        //         //     success:function (result) {
+        //         //         if(result=="success")
+        //         //         {
+        //         //             alert("登录成功");
+        //         //         }
+        //         //         else
+        //         //         {
+        //         //             alert("账户密码错误!")
+        //         //         }
+        //         //
+        //         //     }
+        //         // })
         //     }
-        //    
+        //
         // }
     </script>
     <body>
-        <form action="/test/login" method="post" id="form1">
-            username:<input name="name" id="name" required="required"type="text">
-            password:<input name="password" id="password" required="required"type="password">
-            <button id="sub" type="submit">登录</button>
+<!--        <form action="/test/login" method="post">-->
+<!--            用户名<input type="text" name="username" id="username" required="required">-->
+<!--            密码<input type="password" name="password" id="password" required="required">-->
+<!--            <button id="sub" type="submit">登录</button>-->
+<!--        </form>-->
+        <form class="form-horizontal" role="form" action="/test/login" method="post">
+            <div class="form-group"style="margin-left: 1200px;margin-top: 300px" >
+                <label for="username" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-10" style="width:300px">
+                    <input type="text" class="form-control" id="username" required="required" name="username"
+                           placeholder="请输入用户名" aria-required="false">
+                </div>
+            </div>
+            <div class="form-group"style="margin-left: 1200px">
+                <label for="password" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10" style="width:300px">
+                    <input type="password" class="form-control" id="password" required="required"
+                           name="password" placeholder="请输入密码" aria-required="false">
+                </div>
+            </div>
+            <div class="form-group"style="margin-left: 1200px">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> 请记住我
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group"style="margin-left: 1200px">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">登录</button>
+                </div>
+            </div>
         </form>
-        <button onclick="javascrtpt:window.location.href='http://localhost:8080/test/showreg'">注册</button>
     </body>
 </html>

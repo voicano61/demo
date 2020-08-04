@@ -2,12 +2,16 @@ package com.example.demo.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.mapper.BookMapper;
+import com.example.demo.pojo.Book;
 import com.example.demo.pojo.User;
+import com.example.demo.pojo.book.BookBean;
 import com.example.demo.pojo.page.PageBean;
 import com.example.demo.pojo.user.DataBean;
 import com.example.demo.pojo.user.UserBean;
 import com.example.demo.pojo.userList.UserDataBean;
 import com.example.demo.pojo.userList.UserListBean;
+import com.example.demo.service.BookService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.HttpUtils;
 import com.example.demo.utils.JWTUtils;
@@ -19,9 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.crypto.Data;
-import java.awt.dnd.DropTarget;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,35 +30,35 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    
     //获取全部用户信息
     @ResponseBody
     @RequestMapping(value = "list",method = RequestMethod.POST)
-    public UserListBean selAll(HttpServletRequest request)
+    public UserBean selAll(HttpServletRequest request)
     {
         String token=request.getHeader("token");
-        UserListBean userListBean=new UserListBean();
+        UserBean userBean=new UserBean();
         //解析token中的数据
 //        DecodedJWT jwt = JWT.decode(token);
 //        String name=jwt.getClaim("userName").asString();
         if(JWTUtils.verify(token))
         {
-            List<User> list=this.userService.selAll();
 //            model.addAttribute("userlist",list);
 //        model.addAttribute("test","tset");
-            
-            userListBean.setResultCode(200);
-            UserDataBean dataBean=new UserDataBean();
-            dataBean.setUserList(list);
-            userListBean.setData(dataBean);
-            userListBean.setResultString("成功");
+            DecodedJWT jwt = JWT.decode(token);
+            int role=jwt.getClaim("role").asInt();
+            int id=jwt.getClaim("id").asInt();
+            userBean.setResultCode(200);
+            DataBean dataBean=new DataBean();
+            dataBean.setUser(this.userService.sel(id).get(0));
+            userBean.setData(dataBean);
+            userBean.setResultString("成功");
         }
         else
         {
-            userListBean.setResultCode(500);
-            userListBean.setResultString("失败");
+            userBean.setResultCode(500);
+            userBean.setResultString("失败");
         }
-        return userListBean;
+        return userBean;
     }
     
     
@@ -127,7 +128,7 @@ public class UserController {
                 data.setUser(list.get(0));
                 userBean.setData(data);
 //                String token= TokenUtils.getToken(username+new Date());
-                String token= JWTUtils.sign(username,list.get(0).getId());
+                String token= JWTUtils.sign(username,list.get(0).getId(),list.get(0).getRole());
                 data.setToken(token);
             }
             else
@@ -165,6 +166,7 @@ public class UserController {
                 User user=new User();
                 user.setUsername(username);
                 user.setPassword(password);
+                user.setRole(0);
                 this.userService.insUser(user);
                 userBean.setResultCode(200);
                 DataBean dataBean=new DataBean();
@@ -196,30 +198,30 @@ public class UserController {
         }
     }
     //分页
-    @ResponseBody
-    @RequestMapping(value = "page",method = RequestMethod.POST)
-    public PageBean ajaxBlog(HttpServletRequest request, int pageNum, int pageSize){
-        String token=request.getHeader("token");
-        PageBean pageBean=new PageBean();
-        if(JWTUtils.verify(token))
-        {
-            PageHelper.startPage(pageNum,pageSize);
-            List<User> blogList = this.userService.selAll();
-            PageInfo<User> pageInfo = new PageInfo<User>(blogList);
-            pageBean.setResultCode(200);
-            pageBean.setResultString("成功");
-            pageBean.setPageInfo(pageInfo);
-            return pageBean;
-        }
-        else
-        {
-            pageBean.setResultCode(500);
-            pageBean.setResultString("失败");
-            return pageBean;
-        }
-       
-    }
-    
+//    @ResponseBody
+//    @RequestMapping(value = "page",method = RequestMethod.POST)
+//    public PageBean ajaxBlog(HttpServletRequest request, int pageNum, int pageSize){
+//        String token=request.getHeader("token");
+//        PageBean pageBean=new PageBean();
+//        if(JWTUtils.verify(token))
+//        {
+//            PageHelper.startPage(pageNum,pageSize);
+//            List<User> blogList = this.userService.selAll();
+//            PageInfo<User> pageInfo = new PageInfo<User>(blogList);
+//            pageBean.setResultCode(200);
+//            pageBean.setResultString("成功");
+//            pageBean.setPageInfo(pageInfo);
+//            return pageBean;
+//        }
+//        else
+//        {
+//            pageBean.setResultCode(500);
+//            pageBean.setResultString("失败");
+//            return pageBean;
+//        }
+//       
+//    }
+//    
     @ResponseBody
     @RequestMapping(value = "showInfo",method = RequestMethod.POST)
     public UserBean showInfo(HttpServletRequest request)
@@ -286,4 +288,6 @@ public class UserController {
         }
         return userBean;
     }
+    
+
 }

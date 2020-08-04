@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Insert title here</title>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/./js/jquery-1.9.1.min.js" ></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap3/js/jquery.cookie.js"></script>
+    </head>
+    <body onload="getCookie();" >
+        <table>
+            <h3>用户名：<input type="text" id="userName" name="userName"></h3>
+            <h3>密码：<input type="password" id="passWord" name="passWord"></h3>
+            <input type="checkbox" name="rememenber" id="rememenber">：记住密码<br/>
+            <input type="submit" value="提交" onclick="tologin()">
+        </table>
+    </body>
+    <script type="text/javascript">
+        //把信息设置进去Cookie里面去
+        function setCookie(){
+            var userName = $('#userName').val();
+            var passWord = $('#passWord').val();
+            var aa = $("input[type='checkbox']").is(":checked");//获取是否选中
+            if(aa==true){//如果选中-->记住密码登录
+                $.cookie("userName",userName.trim(),7);//有效时间7天，也可以设置为永久，把时间去掉就好
+                $.cookie("passWord",passWord.trim(),7);
+            }else{//如果没选中-->不记住密码登录
+                $.cookie("passWord", "");
+                $.cookie("userName", "");
+                alert("没有记住密码")
+            }
+        }
+
+
+        function getCookie(){ //获取cookie    
+            var userName = $.cookie("userName"); //获取cookie中的用户名    
+            var pwd =  $.cookie("passWord"); //获取cookie中的登陆密码    
+            if(pwd){//密码存在的话把“记住用户名和密码”复选框勾选住    
+                $("[name='rememenber']").attr("checked","true");
+            }
+            if(userName!=""){//用户名存在的话把用户名填充到用户名文本框    
+                $("#userName").val(userName);
+            }else{
+                $("#userName").val("");
+            }
+            if(pwd!=""){//密码存在的话把密码填充到密码文本框    
+                $("#passWord").val(pwd);
+            }else{
+                $("#passWord").val("");
+            }
+        }
+
+        //登录
+        function tologin(){
+            var userName = $('#userName').val();
+            var passWord = $('#passWord').val();
+            var aa = $("input[type='checkbox']").is(":checked");//获取选中状态
+            if(userName == ''){
+                alert("请输入用户名。");
+                return;
+            }
+            if(passWord == ''){
+                alert("请输入密码。");
+                return;
+            }
+            if(aa==true){
+                setCookie();   //调用设置Cookie的方法 
+                window.location = "<%=request.getContextPath()%>/supplier-list";
+            }else if(aa==false){
+                setCookie();  //调用设置Cookie的方法   
+                window.location = "http://www.baidu.com";
+            }
+
+        }
+    </script>
+</html>

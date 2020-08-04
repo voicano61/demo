@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtils {
-    private static final long EXPIRE_TIME =60 * 1000;
+    private static final long EXPIRE_TIME =60 * 1000*10;
     private static final String TOKEN_SECRET = "thefirsttoken123";
-    public static String sign(String username,int id) {
+    public static String sign(String username,int id,int role) {
         try {
             // 设置过期时间
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
@@ -27,6 +27,7 @@ public class JWTUtils {
                     .withHeader(header)
                     .withClaim("userName", username)
                     .withClaim("id", id)
+                    .withClaim("role",role)
                     .withExpiresAt(date)
                     .sign(algorithm);
         } catch (Exception e) {
