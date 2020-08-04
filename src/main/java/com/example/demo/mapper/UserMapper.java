@@ -44,5 +44,9 @@ public interface UserMapper {
             "where id=#{id}"+
             "</script>")
     void updateInfo(User user);
+    @Select("select * from user where id=#{id}")
+    User selOne(int id);
 
+    @Update("update user set money=money-#{price} where id=#{id}")
+    void upMoney(@Param("id")int id, @Param("price")int price);
 }

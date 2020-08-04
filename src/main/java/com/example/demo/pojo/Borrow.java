@@ -1,5 +1,6 @@
 package com.example.demo.pojo;
 
+import javax.swing.tree.DefaultTreeCellEditor;
 import java.util.Date;
 
 public class Borrow {
@@ -11,7 +12,8 @@ public class Borrow {
     private Date date;
     private Date returnDate ;
     private Date renew;
-
+    private Date deadLine;
+    private int state;
     public int getId() {
         return id;
     }
@@ -74,5 +76,21 @@ public class Borrow {
 
     public void setRenew(Date renew) {
         this.renew = renew;
+    }
+
+    public Date getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(Date deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

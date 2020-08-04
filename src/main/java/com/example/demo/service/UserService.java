@@ -20,4 +20,6 @@ public interface UserService {
     void insUser(User user);
     List<User> selByName(String username);
     void updateInfo(User user);
+    User selOne(int id);
+    void upMoney(int id,int price);
 }

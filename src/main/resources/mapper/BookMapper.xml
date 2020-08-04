@@ -17,4 +17,10 @@
     <update id="updateNumber" parameterType="Integer">
         update book set number=number-1 where id=#{id}
     </update>
+    <select id="selPrice" resultType="com.example.demo.pojo.Book" parameterType="Integer">
+        select * from book where id=#{id}
+    </select>
+    <update id="upNumber" parameterType="Integer">
+        update book set number=number+1 where id=#{id}
+    </update>
 </mapper>

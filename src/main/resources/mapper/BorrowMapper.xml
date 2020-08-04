@@ -13,7 +13,21 @@
         <result column="renew" jdbcType="DATE" property="renew" />
     </resultMap>
     <insert id="borrowBook" parameterType="com.example.demo.pojo.Borrow">
-        insert into borrow (bookName,author,bookId,date,userId) values (#{bookName},#{author},#{bookId},#{date},#{userId})
+        insert into borrow (bookName,author,bookId,date,userId,deadline,state) values (#{bookName},#{author},#{bookId},#{date},#{userId},#{deadLine},0)
     </insert>
-
+    <select id="myBorrow" resultType="com.example.demo.pojo.Borrow" parameterType="Integer">
+        select * from borrow where userId=#{userId}
+    </select>
+    <update id="renew" parameterType="com.example.demo.pojo.Borrow">
+        update borrow set deadline=#{deadLine},renew=#{renew},state=1 where id=#{id}
+    </update>
+    <update id="timeout" parameterType="Integer">
+        update borrow set state=3 where id=#{id}
+    </update>
+    <update id="compensate" parameterType="Integer">
+        update borrow set state=4 where id=#{id}
+    </update>
+    <update id="returnBook" parameterType="com.example.demo.pojo.Borrow">
+        update borrow set state=2,reBook=#{returnDate} where id=#{id}
+    </update>
 </mapper>

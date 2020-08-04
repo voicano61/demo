@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <script>
+        function sub(ths) {
+            var $td = $(ths).parent().parent().children();
+            var id = $td.eq(0).text();
+            var deadLine=$td.eq(5).text();
+            //     $.ajax({
+            //         url:"/test/borrowBook",
+            //         type:"post",
+            //         data:
+            //             {
+            //                 "bookId":nid,
+            //                 "bookName":bookName,
+            //                 "author":author
+            //             },
+            //         success: function (result) {
+            //         }
+            // });
+            window.location.href="http://localhost:8080/test/renew?id="+id+"&deadLine="+deadLine;
+        }
+    </script>
+    <script>
+        function returnBook(ths) {
+            var $td = $(ths).parent().parent().children();
+            var id = $td.eq(0).text();
+            var bookId = $td.eq(1).text();
+            window.location.href="http://localhost:8080/test/returnBook?id="+id+"&bookId="+bookId;
+        }
+    </script>
+    <script>
+        function message() {
+            alert("已归还该图书！")
+        }
+    </script>
+    <script>
+        function openwin(ths) {
+            var $td = $(ths).parent().parent().children();
+            var id = $td.eq(0).text();
+            var bookId = $td.eq(1).text();
+            $.ajax({
+                url:"/test/selPrice",
+                type:"get",
+                data:{
+                    "bookId":bookId 
+                },
+                success:function (result) {
+                    if(result=="lack")
+                    {
+                        alert("余额不足")
+                    }
+                    else if(result=="error")
+                    {
+                    }
+                    else
+                    {
+                        var r=confirm("确认缴费");
+                        if (r==true)
+                        {
+                            window.location.href="http://localhost:8080/test/compensate?id="+id+"&price="+result;
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
+                }
+                
+            })
+
+        }
+    </script>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">图书</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="/test/showBook">借阅图书</a></li>
+                        <li><a href="/test/myborrow">我的借阅</a></li>
+                        <li><a href="#">待归还</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>借阅时间</th>
+                <th>到期时间</th>
+                <th>状态</th>
+                <th>操作</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="borrow:${borrowList}">
+                <td th:text="${borrow.getId()}"  style="display:none">
+                <td th:text="${borrow.getBookId()}"  style="display:none">
+                <td th:text="${borrow.getBookName()}"/>
+                <td th:text="${borrow.getAuthor()}"/>
+                <td th:text="${#dates.format(borrow.getDate(), 'yyyy-MM-dd')}"/>
+                <td th:text="${#dates.format(borrow.getDeadLine(), 'yyyy-MM-dd')}"/>
+                <td th:if="${borrow.getState()==2}">已归还</td>
+                <td th:if="${borrow.getState()==0}">未归还</td>
+                <td th:if="${borrow.getState()==1}">续借中</td>
+                <td th:if="${borrow.getState()==4}">已赔偿</td>
+                <td th:if="${borrow.getState()==3}">超时</td>
+                <td th:if="${borrow.getReturnDate()==null&&borrow.getRenew()==null&&borrow.getState()!=3&&borrow.getState()!=4}"><button type="button" class="btn btn-primary" id="button1" onclick="sub(this)"style="outline: none"> 续借
+                </button></td>
+                <td th:if="${borrow.getReturnDate()==null&&borrow.getState()!=3&&borrow.getState()!=4&&borrow.getState()!=2}"><button type="button" class="btn btn-info" id="button2" onclick="returnBook(this)"style="outline: none"> 归还
+                </button></td>
+                <td th:if="${borrow.getState()==2||borrow.getState()==4}"><button type="button" class="btn btn-success"id="button3" onclick="message(this)"style="outline: none"> 完成
+                </button></td>
+                <td th:if="${borrow.getReturnDate()==null&&borrow.getState()==3}"><button type="button" class="btn btn-danger" id="button4" onclick="openwin(this)"style="outline: none"> 赔偿
+                </button></td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

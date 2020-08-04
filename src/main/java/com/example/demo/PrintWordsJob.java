@@ -20,8 +20,8 @@ public class PrintWordsJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String printTime = new SimpleDateFormat("yy-MM-dd HH-mm-ss").format(new Date());
        // System.out.println(jobExecutionContext.getJobDetail().getKey());
-        System.out.println("PrintWordsJob start at:" + printTime + ", prints: Hello Job-" + new Random().nextInt(100));
-
+       // System.out.println("PrintWordsJob start at:" + printTime + ", prints: Hello Job-" + new Random().nextInt(100));
+        
     }
 }
 

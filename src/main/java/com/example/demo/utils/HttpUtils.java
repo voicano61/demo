@@ -124,4 +124,71 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         return response;
     }
+    
+    public static Response myBorrow(String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/myBorrow")
+                .post(okhttp3.internal.Util.EMPTY_REQUEST)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+
+    public static Response renew(String token,String id,String deadLine) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("id", id)
+                .add("deadLine",deadLine)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/renew")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response selPrice(String token,String bookId) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("bookId",bookId)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/selPrice")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response returnBook(String token,String id,String bookId) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("id", id)
+                .add("bookId",bookId)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/returnBook")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response compensate(String token,String id,String price) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("id", id)
+                .add("price",price)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/compensate")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
 }

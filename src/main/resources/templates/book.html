@@ -13,18 +13,19 @@
             var nid = $td.eq(0).text();
             var bookName=$td.eq(1).text();
             var author=$td.eq(2).text();
-            $.ajax({
-                url:"/test/borrowBook",
-                type:"post",
-                data:
-                    {
-                        "bookId":nid,
-                        "bookName":bookName,
-                        "author":author
-                    },
-                success: function (result) {
-                }
-        });
+        //     $.ajax({
+        //         url:"/test/borrowBook",
+        //         type:"post",
+        //         data:
+        //             {
+        //                 "bookId":nid,
+        //                 "bookName":bookName,
+        //                 "author":author
+        //             },
+        //         success: function (result) {
+        //         }
+        // });
+            window.location.href="http://localhost:8080/test/borrowBook?bookId="+nid+"&bookName="+bookName+"&author="+author;
         }
     </script>
     <body>
@@ -36,7 +37,7 @@
                 <div>
                     <ul class="nav navbar-nav">
                         <li><a href="/test/showBook">借阅图书</a></li>
-                        <li><a href="#">我的借阅</a></li>
+                        <li><a href="/test/myborrow">我的借阅</a></li>
                         <li><a href="#">待归还</a></li>
                     </ul>
                 </div>
@@ -64,6 +65,5 @@
             </tr>
             </tbody>
         </table>
-
     </body>
 </html>

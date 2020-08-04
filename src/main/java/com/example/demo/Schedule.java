@@ -23,7 +23,7 @@ public class Schedule {
         Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "triggerGroup1")
                 .startNow()//立即生效
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(10)//每隔1s执行一次
+                        .withIntervalInHours(24)
                         .repeatForever()).build();//一直执行
 
         //4、执行

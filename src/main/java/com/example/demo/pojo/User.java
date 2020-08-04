@@ -13,6 +13,7 @@ public class User {
     private String username;
     private String password;
     private int role;
+    private int money;
     public User(){}
     public User(int id,String username,String password)
     {
@@ -50,5 +51,13 @@ public class User {
 
     public void setRole(int role) {
         this.role = role;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }

@@ -17,4 +17,11 @@ public interface BookMapper {
     List<Book> selBook();
     @Update("update book set number=number-1 where id=#{id}")
     void updateNumber(int id);
+    
+    @Select("select * from book where id=#{id}")
+    Book selPrice(int id);
+    @Update("update book set number=number+1 where id=#{id}")
+    void upNumber(int id);
+
+
 }

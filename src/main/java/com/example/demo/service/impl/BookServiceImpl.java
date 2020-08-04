@@ -20,4 +20,10 @@ public class BookServiceImpl implements BookService {
     public List<Book> selBook() {
         return this.bookMapper.selBook();
     }
+
+    @Override
+    public Book selPrice(int id) {
+       Book book=this.bookMapper.selPrice(id);
+        return book;
+    }
 }

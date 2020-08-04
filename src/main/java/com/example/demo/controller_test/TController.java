@@ -179,7 +179,7 @@ public class TController {
         return "test_login";
     }
     
-    @RequestMapping(value = "showBook",method = RequestMethod.POST)
+    @RequestMapping(value = "showBook",method = RequestMethod.GET)
     public String showBook(Model model) throws IOException {
         Jedis jedis = new Jedis("127.0.0.1",6379);
         Response res=HttpUtils.allBook(jedis.get("token"));
@@ -195,7 +195,7 @@ public class TController {
             return "login";
         }
     }
-    @RequestMapping(value = "borrowBook",method = RequestMethod.POST)
+    @RequestMapping(value = "borrowBook",method = RequestMethod.GET)
     public String borrowBook(HttpServletRequest request,Model model) throws IOException {
         Jedis jedis = new Jedis("127.0.0.1",6379);
         String bookId=request.getParameter("bookId");
@@ -213,5 +213,92 @@ public class TController {
             return "login";
         }
     }
-    
+    @RequestMapping(value = "myborrow",method = RequestMethod.GET)
+    public String myBorrow(HttpServletRequest request,Model model) throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.myBorrow(jedis.get("token"));
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            model.addAttribute("borrowList",bookBean.getData().getBorrows());
+            return "myBorrow";
+        }
+        else
+        {
+            return "login";
+        }
+    }
+    @RequestMapping(value = "renew",method = RequestMethod.GET)
+    public String renew(HttpServletRequest request,Model model) throws IOException {
+        String id=request.getParameter("id");
+        String deadline=request.getParameter("deadLine");
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.renew(jedis.get("token"),id,deadline);
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            return "redirect:/test/myborrow";
+        }
+        else
+        {
+            return "login";
+        }
+    }
+    @ResponseBody
+    @RequestMapping(value = "selPrice",method = RequestMethod.GET)
+    public String selPrice(HttpServletRequest request,Model model) throws IOException {
+        String bookId=request.getParameter("bookId");
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.selPrice(jedis.get("token"),bookId);
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            return bookBean.getResultString();
+        }
+        else if(bookBean.getResultCode()==300)
+        {
+            return "lack";
+        }
+        else
+        {
+            return "error";
+        }
+    }
+    @RequestMapping(value = "returnBook",method = RequestMethod.GET)
+    public String returnBook(HttpServletRequest request) throws IOException {
+        String id=request.getParameter("id");
+        String bookId=request.getParameter("bookId");
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.returnBook(jedis.get("token"),id,bookId);
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            return "redirect:/test/myborrow";
+        }
+        else
+        {
+            return "login";
+        }
+    }
+    @RequestMapping(value = "compensate",method = RequestMethod.GET)
+    public String compensate(HttpServletRequest request) throws IOException {
+        String id=request.getParameter("id");
+        String price=request.getParameter("price");
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.compensate(jedis.get("token"),id,price);
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            return "redirect:/test/myborrow";
+        }
+        else
+        {
+            return "login";
+        }
+    }
 }

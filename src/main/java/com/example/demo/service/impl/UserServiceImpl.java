@@ -72,5 +72,16 @@ public class UserServiceImpl implements UserService {
         this.userMapper.updateInfo(user);
     }
 
+    @Override
+    public User selOne(int id) {
+        User user=this.userMapper.selOne(id);
+        return user;
+    }
+
+    @Override
+    public void upMoney(int id, int price) {
+        this.userMapper.upMoney(id,price);
+    }
+
 
 }
