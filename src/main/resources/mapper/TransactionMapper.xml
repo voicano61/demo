@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TransactionMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.pojo.Transaction">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="userId" jdbcType="INTEGER" property="userId" />
+        <result column="amount" jdbcType="INTEGER" property="amount" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="date" jdbcType="DATE" property="date" />
+    </resultMap>
+    <insert id="add" parameterType="com.example.demo.pojo.Transaction">
+    insert into transaction (userId,state,amount,date) values(#{userId},#{state},#{amount},#{date})
+    </insert>
+</mapper>

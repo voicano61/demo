@@ -253,6 +253,7 @@ public class UserController {
         String token=request.getHeader("token");
         UserBean userBean=new UserBean();
         if(JWTUtils.verify(token)) {
+            
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             System.out.println(username+password);
@@ -288,6 +289,29 @@ public class UserController {
         }
         return userBean;
     }
-    
+    @ResponseBody
+    @RequestMapping(value = "selOne",method = RequestMethod.POST)
+    public UserBean selOne(HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        UserBean userBean=new UserBean();
+        if(JWTUtils.verify(token)) {
+            DecodedJWT jwt = JWT.decode(token);
+            int userId=jwt.getClaim("id").asInt();
+            User user=this.userService.selOne(userId);
+            userBean.setResultCode(200);
+            userBean.setResultString("success");
+            DataBean dataBean=new DataBean();
+            dataBean.setUser(user);
+            userBean.setData(dataBean);
+            
+        }
+        else
+        {
+            userBean.setResultCode(500);
+            userBean.setResultString("error");
+        }
+        return userBean;
+    }
 
 }

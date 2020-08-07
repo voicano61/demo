@@ -25,4 +25,6 @@ public interface BorrowMapper {
     void compensate(int id);
     @Update("update borrow set state=2,reBook=#{returnDate} where id=#{id}")
     void returnBook(Borrow book);
+    @Select("select * from borrow where state=0 or state=1")
+    List<Borrow> selRe();
 }

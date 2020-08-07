@@ -1,14 +1,14 @@
 package com.example.demo.controller_test;
 
 import com.alibaba.fastjson.JSON;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.book.BookBean;
-import com.example.demo.pojo.page.PageBean;
 import com.example.demo.pojo.user.UserBean;
-import com.example.demo.pojo.userList.UserListBean;
 import com.example.demo.utils.HttpUtils;
-import com.example.demo.utils.RedisUtil;
 import okhttp3.Response;
+import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmEntityDiscriminatorType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
 
-import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -27,7 +27,18 @@ public class TController {
     @RequestMapping("/")
     public String welcome()
     {
-        return "login";
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+//        jedis.set("token","");
+        if(jedis.get("token")==null)
+        {
+            
+            return "login";
+        }
+        else
+        {
+            return "redirect:/test/showBook";
+        }
+       
     }
     
     @RequestMapping(value = "login" ,method = RequestMethod.POST)
@@ -37,10 +48,10 @@ public class TController {
         Response response=HttpUtils.login(username, password);
         String responseData = response.body().string();
         UserBean info=JSON.parseObject( responseData,UserBean.class);
+        Jedis jedis = new Jedis("127.0.0.1",6379);
         if(info.getResultCode()==200) {
-            Jedis jedis = new Jedis("127.0.0.1",6379);
-            jedis.set("token",info.getData().getToken());
 //            System.out.println(redisUtil.get("token"));
+            jedis.set("token",info.getData().getToken());
             Response responses=HttpUtils.show((String) jedis.get("token"));
             String responseDatas = responses.body().string();
             UserBean userBean=JSON.parseObject(responseDatas,UserBean.class);
@@ -51,6 +62,7 @@ public class TController {
             BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
             if(userBean.getData().getUser().getRole()==0)
             {
+                model.addAttribute("user",userBean.getData().getUser());
                 model.addAttribute("bookList",bookBean.getData().getBook());
                 return "book";
             }
@@ -61,6 +73,7 @@ public class TController {
         }
         else
         {
+            model.addAttribute("message",info.getResultString());
             return "login";
         }
         
@@ -117,7 +130,7 @@ public class TController {
         }
         else
         {
-
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
@@ -164,7 +177,7 @@ public class TController {
             }
             else
             {
-
+                model.addAttribute("message","账户登录信息过期");
                 return "login";
             }
         }
@@ -176,7 +189,7 @@ public class TController {
     @RequestMapping("tLogin")
     public String tLogin()
     {
-        return "test_login";
+        return "";
     }
     
     @RequestMapping(value = "showBook",method = RequestMethod.GET)
@@ -187,11 +200,19 @@ public class TController {
         BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
         if(bookBean.getResultCode()==200)
         {
+            User user=new User();
+            if(userMessage().getResultCode()==200)
+            {
+                user=userMessage().getData().getUser();
+            }
+            model.addAttribute("user",user);
             model.addAttribute("bookList",bookBean.getData().getBook());
             return "book";
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
@@ -206,10 +227,12 @@ public class TController {
         BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
         if(bookBean.getResultCode()==200)
         {
-            return "redirect:/test/showBook";
+            return "redirect:/test/myborrow";
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
@@ -221,11 +244,20 @@ public class TController {
         BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
         if(bookBean.getResultCode()==200)
         {
+
+            User user=new User();
+            if(userMessage().getResultCode()==200)
+            {
+                user=userMessage().getData().getUser();
+            }
+            model.addAttribute("user",user);
             model.addAttribute("borrowList",bookBean.getData().getBorrows());
             return "myBorrow";
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
@@ -243,6 +275,8 @@ public class TController {
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
@@ -264,11 +298,13 @@ public class TController {
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "error";
         }
     }
     @RequestMapping(value = "returnBook",method = RequestMethod.GET)
-    public String returnBook(HttpServletRequest request) throws IOException {
+    public String returnBook(HttpServletRequest request,Model model) throws IOException {
         String id=request.getParameter("id");
         String bookId=request.getParameter("bookId");
         Jedis jedis = new Jedis("127.0.0.1",6379);
@@ -277,15 +313,17 @@ public class TController {
         BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
         if(bookBean.getResultCode()==200)
         {
-            return "redirect:/test/myborrow";
+            return "redirect:/test/selRe";
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
     }
     @RequestMapping(value = "compensate",method = RequestMethod.GET)
-    public String compensate(HttpServletRequest request) throws IOException {
+    public String compensate(HttpServletRequest request,Model model) throws IOException {
         String id=request.getParameter("id");
         String price=request.getParameter("price");
         Jedis jedis = new Jedis("127.0.0.1",6379);
@@ -298,7 +336,47 @@ public class TController {
         }
         else
         {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
             return "login";
         }
+    }
+    @RequestMapping(value = "selRe",method = RequestMethod.GET)
+    public String selRe(HttpServletRequest request,Model model) throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response res=HttpUtils.selRe(jedis.get("token"));
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            User user=new User();
+            if(userMessage().getResultCode()==200)
+            {
+                user=userMessage().getData().getUser();
+            }
+            model.addAttribute("user",user);
+            model.addAttribute("reBookList",bookBean.getData().getBorrows());
+            return "retBook";
+        }
+        else
+        {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
+            return "login";
+        }
+    }
+    @RequestMapping(value = "signout",method = RequestMethod.GET)
+    public String signout(HttpServletRequest request,Model model) throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        jedis.del("token");
+        model.addAttribute("message","已退出");
+        return "login";
+    }
+    public UserBean userMessage() throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        Response responses=HttpUtils.selOne((String) jedis.get("token"));
+        String responseDatas = responses.body().string();
+        UserBean userBean=JSON.parseObject(responseDatas,UserBean.class);
+        return userBean;
     }
 }

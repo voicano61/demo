@@ -2,9 +2,11 @@ package com.example.demo.service.impl;
 
 import com.example.demo.mapper.BookMapper;
 import com.example.demo.mapper.BorrowMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.pojo.Book;
 import com.example.demo.pojo.Borrow;
 import com.example.demo.service.BorrowService;
+import com.example.demo.service.UserService;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ public class BorrowServiceImpl implements BorrowService {
     private BorrowMapper borrowMapper;
     @Autowired
     private BookMapper bookMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public void borrow(Borrow book) {
         this.borrowMapper.borrowBook(book);
@@ -39,7 +43,8 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
-    public void compensate(int id) {
+    public void compensate(int id) 
+    {
         this.borrowMapper.compensate(id);
     }
 
@@ -47,6 +52,12 @@ public class BorrowServiceImpl implements BorrowService {
     public void returnBook(Borrow book) {
         this.borrowMapper.returnBook(book);
         this.bookMapper.upNumber(book.getBookId());
+    }
+
+    @Override
+    public List<Borrow> selRe() {
+        List<Borrow> list=this.borrowMapper.selRe();
+        return list;
     }
 
 }

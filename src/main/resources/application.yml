@@ -37,7 +37,8 @@ spring:
       additional-exclude: WEB-INF/**
   freemarker:
     cache: false
-
+  resources:
+    static-locations: classpath:/static
   mvc:
     view:
       prefix: classpath:/templates/

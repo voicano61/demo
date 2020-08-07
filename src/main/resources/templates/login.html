@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../layer/layer.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css"  media="all">
 </head>
-    <script type="text/javascript">
+    <script>
+
         // function submit() {
         //     var username=document.getElementById("username").value
         //     var password=document.getElementById("password").value
@@ -44,12 +47,23 @@
         //
         // }
     </script>
-    <body>
+    <script>
+        function mes() {
+            var msg=$('#message').val()
+            if(msg!=null&&msg!="")
+            if(msg!=null&&msg!="")
+            {
+                layer.msg(msg);
+            }
+        }
+    </script>
+    <body onload="mes()">
 <!--        <form action="/test/login" method="post">-->
 <!--            用户名<input type="text" name="username" id="username" required="required">-->
 <!--            密码<input type="password" name="password" id="password" required="required">-->
 <!--            <button id="sub" type="submit">登录</button>-->
 <!--        </form>-->
+        <input th:value="${message}" style="display: none" id="message" name="message" type="text">
         <form class="form-horizontal" role="form" action="/test/login" method="post">
             <div class="form-group"style="margin-left: 1200px;margin-top: 300px" >
                 <label for="username" class="col-sm-2 control-label">用户名</label>
@@ -80,5 +94,6 @@
                 </div>
             </div>
         </form>
+        <script src="../layui/layui.js" charset="utf-8"></script>
     </body>
 </html>

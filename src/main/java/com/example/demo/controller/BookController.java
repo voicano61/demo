@@ -4,12 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.pojo.Book;
 import com.example.demo.pojo.Borrow;
+import com.example.demo.pojo.Transaction;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.book.BookBean;
 import com.example.demo.pojo.book.BookDataBean;
 import com.example.demo.pojo.page.PageBean;
 import com.example.demo.service.BookService;
 import com.example.demo.service.BorrowService;
+import com.example.demo.service.TransactionService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.JWTUtils;
 import com.github.pagehelper.PageHelper;
@@ -38,6 +40,8 @@ public class BookController {
     private BorrowService borrowService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TransactionService transactionService;
     @ResponseBody
     @RequestMapping(value = "selAllBook",method = RequestMethod.POST)
     public BookBean selAllBook(HttpServletRequest request)
@@ -158,7 +162,7 @@ public class BookController {
             {
                 long beginMillisecond = bookList.get(i).getDeadLine().getTime();
                 long endMillisecond = date.getTime();
-                if(endMillisecond>beginMillisecond)
+                if(endMillisecond>beginMillisecond&&bookList.get(i).getState()!=4)
                 {
                     this.borrowService.timeout(bookList.get(i).getId());
                 }
@@ -242,7 +246,7 @@ public class BookController {
     }
     @ResponseBody
     @RequestMapping(value = "compensate",method = RequestMethod.POST)
-    public BookBean compensate(HttpServletRequest request) throws ParseException {
+    public BookBean compensate(HttpServletRequest request) {
         String token=request.getHeader("token");
         String id=request.getParameter("id");
         String price=request.getParameter("price");
@@ -251,6 +255,12 @@ public class BookController {
         {
             DecodedJWT jwt = JWT.decode(token);
             int userId=jwt.getClaim("id").asInt();
+            Transaction transaction=new Transaction();
+            transaction.setUserId(userId);
+            transaction.setAmount(Integer.parseInt(price));
+            transaction.setState(0);
+            transaction.setDate(new Date());
+            this.transactionService.add(transaction);
             this.borrowService.compensate(Integer.parseInt(id));
             this.userService.upMoney(userId,Integer.parseInt(price));
             bookBean.setResultCode(200);
@@ -283,6 +293,27 @@ public class BookController {
             bookBean.setResultCode(200);
             bookBean.setResultString("成功");
             BookDataBean bookDataBean=new BookDataBean();
+            bookBean.setData(bookDataBean);
+        }
+        else
+        {
+            bookBean.setResultCode(500);
+            bookBean.setResultString("失败");
+        }
+        return bookBean;
+    }
+    @ResponseBody
+    @RequestMapping(value = "selRe",method = RequestMethod.POST)
+    public BookBean selRe(HttpServletRequest request) throws ParseException {
+        String token=request.getHeader("token");
+        BookBean bookBean=new BookBean();
+        if(JWTUtils.verify(token))
+        {
+            List<Borrow> list=this.borrowService.selRe();
+            bookBean.setResultCode(200);
+            bookBean.setResultString("成功");
+            BookDataBean bookDataBean=new BookDataBean();
+            bookDataBean.setBorrows(list);
             bookBean.setData(bookDataBean);
         }
         else

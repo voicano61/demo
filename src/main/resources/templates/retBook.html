@@ -12,10 +12,9 @@
     <script>
         function sub(ths) {
             var $td = $(ths).parent().parent().children();
-            var nid = $td.eq(0).text();
-            var bookName=$td.eq(1).text();
-            var author=$td.eq(2).text();
-            window.location.href="http://localhost:8080/test/borrowBook?bookId="+nid+"&bookName="+bookName+"&author="+author;
+            var id = $td.eq(0).text();
+            var bookId = $td.eq(1).text();
+            window.location.href="http://localhost:8080/test/returnBook?id="+id+"&bookId="+bookId;
         }
     </script>
     <script>
@@ -38,9 +37,9 @@
     <body>
         <div class="layui-header">
             <ul class="layui-nav" lay-filter="">
-                <li class="layui-nav-item layui-this"><a href="/test/showBook">借阅图书</a></li>
+                <li class="layui-nav-item"><a href="/test/showBook">借阅图书</a></li>
                 <li class="layui-nav-item"><a href="/test/myborrow">我的借阅</a></li>
-                <li class="layui-nav-item"><a href="/test/selRe">待归还</a></li>
+                <li class="layui-nav-item layui-this"><a href="/test/selRe">待归还</a></li>
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item"><img src="../image/money.png" th:text="${user.getMoney()}"></li>
@@ -61,25 +60,25 @@
             <tr>
                 <th>书名</th>
                 <th>作者</th>
-                <th>数量</th>
+                <th>借阅时间</th>
+                <th>到期时间</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
-                <tr th:each="book:${bookList}">
-                    <td th:text="${book.getId()}"  style="display:none">
-                    <td th:text="${book.getBookName()}"/>
-                    <td th:text="${book.getAuthor()}"/>
-                    <td th:text="${book.getNumber()}"/>
-                    <td><button type="button" class="btn btn-primary"
-                                data-toggle="button" id="button" onclick="sub(this)"> 借阅
-                    </button>
-                    </td>
-                </tr>
+            <tr th:each="book:${reBookList}">
+                <td th:text="${book.getId()}"  style="display:none">
+                <td th:text="${book.getBookId()}"  style="display:none">
+                <td th:text="${book.getBookName()}"/>
+                <td th:text="${book.getAuthor()}"/>
+                <td th:text="${#dates.format(book.getDate(), 'yyyy-MM-dd')}"/>
+                <td th:text="${#dates.format(book.getDeadLine(), 'yyyy-MM-dd')}"/>
+                <td><button type="button" class="btn btn-info" id="button2" onclick="sub(this)" style="outline: none"> 归还
+                </button></td>
+            </tr>
             </tbody>
         </table>
-        
-        <script src="../layui/layui.js" charset="utf-8"></script>
+        <script src="../layui/layui.js"></script>
         <script>
             //注意：导航 依赖 element 模块，否则无法进行功能性操作
             layui.use('element', function(){

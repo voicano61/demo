@@ -14,4 +14,5 @@ public interface BorrowService {
     void timeout(int id);
     void compensate(int id);
     void returnBook(Borrow book);
+    List<Borrow> selRe();
 }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtils {
-    private static final long EXPIRE_TIME =60 * 1000*10;
+    private static final long EXPIRE_TIME =60 * 1000 * 30;
     private static final String TOKEN_SECRET = "thefirsttoken123";
     public static String sign(String username,int id,int role) {
         try {

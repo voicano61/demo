@@ -191,4 +191,24 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         return response;
     }
+    public static Response selRe(String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/selRe")
+                .post(okhttp3.internal.Util.EMPTY_REQUEST)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response selOne(String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/user/selOne")
+                .post(okhttp3.internal.Util.EMPTY_REQUEST)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
 }
