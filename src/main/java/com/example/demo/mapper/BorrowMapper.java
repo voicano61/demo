@@ -3,6 +3,7 @@ package com.example.demo.mapper;
 import com.example.demo.pojo.Book;
 import com.example.demo.pojo.Borrow;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -27,4 +28,6 @@ public interface BorrowMapper {
     void returnBook(Borrow book);
     @Select("select * from borrow where state=0 or state=1")
     List<Borrow> selRe();
+    @Select("select * from borrow where userId=#{userId} and (state=0 or state=1) AND (author LIKE '%#{name}%' or bookName LIKE '%#{name}%')")
+    List<Borrow> searchBorrow(@Param("userId") int userId,@Param("name")String name);
 }

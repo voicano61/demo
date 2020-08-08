@@ -3,6 +3,7 @@ package com.example.demo.controller_test;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.pojo.Book;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.book.BookBean;
 import com.example.demo.pojo.user.UserBean;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("test")
@@ -378,5 +378,52 @@ public class TController {
         String responseDatas = responses.body().string();
         UserBean userBean=JSON.parseObject(responseDatas,UserBean.class);
         return userBean;
+    }
+    @RequestMapping(value = "searchBook",method = RequestMethod.GET)
+    public String searchBook(HttpServletRequest request,Model model) throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        String name=request.getParameter("name");
+        Response res=HttpUtils.searchBook(jedis.get("token"),name);
+        String resDatas=res.body().string();
+        BookBean bookBean=JSON.parseObject(resDatas,BookBean.class);
+        if(bookBean.getResultCode()==200)
+        {
+            User user=new User();
+            if(userMessage().getResultCode()==200)
+            {
+                user=userMessage().getData().getUser();
+            }
+            List<Book> list=bookBean.getData().getBook(); 
+            model.addAttribute("user",user);
+            model.addAttribute("bookList",list);
+            return "book";
+        }
+        else
+        {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
+            return "login";
+        }
+    }
+    @RequestMapping(value = "change",method = RequestMethod.GET)
+    public String change(HttpServletRequest request,Model model) throws IOException {
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        String userName=request.getParameter("userName");
+        String password=request.getParameter("password");
+        Response res=HttpUtils.change(jedis.get("token"),userName,password);
+        String resDatas=res.body().string();
+        UserBean userBean=JSON.parseObject(resDatas,UserBean.class);
+        if(userBean.getResultCode()==200)
+        {
+            jedis.del("token");
+            model.addAttribute("message","更改成功,请重新登录");
+            return "login";
+        }
+        else
+        {
+            jedis.del("token");
+            model.addAttribute("message","账户登录信息过期");
+            return "login";
+        }
     }
 }

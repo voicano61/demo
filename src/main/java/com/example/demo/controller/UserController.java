@@ -313,5 +313,30 @@ public class UserController {
         }
         return userBean;
     }
-
+    @ResponseBody
+    @RequestMapping(value = "change",method = RequestMethod.POST)
+    public UserBean change(HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        String userName=request.getParameter("userName");
+        String password=request.getParameter("password");
+        UserBean userBean=new UserBean();
+        if(JWTUtils.verify(token)) {
+            DecodedJWT jwt = JWT.decode(token);
+            int userId=jwt.getClaim("id").asInt();
+            User user=new User();
+            user.setId(userId);
+            user.setUsername(userName);
+            user.setPassword(password);
+            this.userService.updateInfo(user);
+            userBean.setResultCode(200);
+            userBean.setResultString("success");
+        }
+        else
+        {
+            userBean.setResultCode(500);
+            userBean.setResultString("error");
+        }
+        return userBean;
+    }
 }

@@ -211,4 +211,31 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         return response;
     }
+    public static Response searchBook(String token,String name) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("name", name)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/searchBook")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response change(String token,String userName,String password) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("userName", userName)
+                .add("password",password)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/user/change")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
 }

@@ -13,6 +13,8 @@
 # 应用服务 WEB 访问端口
 server:
   port: 8080
+  tomcat:
+    uri-encoding: utf-8
 # Actuator Web 访问端口
 #management.server.port=8081
 #
@@ -29,7 +31,12 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
   devtools:
     restart:
       enabled: true
@@ -58,7 +65,6 @@ spring:
         max-active: 100
         max-wait: 30000
         min-idle: 0
-
 mybatis:
   type-aliases-package: com.example.demo.pojo
   mapper-locations: classpath:mapper/*.xml
@@ -67,4 +73,9 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
   page-size-zero: true
-  
+logging:
+  level:
+    com:
+      example:
+        demo:
+          mapper: debug

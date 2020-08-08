@@ -35,21 +35,82 @@
             });
         }
     </script>
+    <script>
+        function search() {
+            var name=document.getElementById("name").value
+            if(name!=null&&name!="")
+            {
+                window.location.href="http://localhost:8080/test/searchBook?name="+name;
+            }
+            else
+            {
+                window.location.href="http://localhost:8080/test/showBook";
+            }
+        }
+    </script>
+    <script>
+        function change() {
+            layer.open({
+                type:1,
+                area:['300px','230px'],
+                title: '修改信息'
+                ,content: $("#test"),
+                shade: 0,
+                move: false,
+                btn: ['提交']
+                ,btn1: function(index, layero){
+                    var userName=$("#userName").val();
+                    var name=$("#uname").text();
+                    var password=$("#password").val();
+                    var pw=$("#pw").text();
+                    if((userName==null||userName==""||userName==name)&&(password==null||password==""||password==pw))
+                    {
+                        alert("未填写/未更改")
+                        $("#userName").val(name);
+                        $("#password").val("");
+                        layer.closeAll();
+                    }
+                    else
+                    {
+                        window.location.href="http://localhost:8080/test/change?userName="+userName+"&password="+password;
+                        $("#userName").val(name);
+                        $("#password").val("");
+                        layer.closeAll();
+                    }
+                    
+                },
+                cancel: function(layero,index){
+                    layer.closeAll();
+                    $("#userName").val(name);
+                    $("#password").val("");
+                }
+
+            });
+
+
+        }
+    </script>
     <body>
         <div class="layui-header">
             <ul class="layui-nav" lay-filter="">
                 <li class="layui-nav-item layui-this"><a href="/test/showBook">借阅图书</a></li>
                 <li class="layui-nav-item"><a href="/test/myborrow">我的借阅</a></li>
                 <li class="layui-nav-item"><a href="/test/selRe">待归还</a></li>
+                <div class="layui-input-inline">
+                <input type="text" name="search" placeholder="请输入书名或作者名" class="layui-input" id="name" style="color: #0C0C0C">
+                </div>
+                <button type="button" class="layui-btn" onclick="search()">搜索</button>
             </ul>
+            
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item"><img src="../image/money.png" th:text="${user.getMoney()}"></li>
+               <input th:text="${user.getPassword()}" id="pw" style="display:none">
                 <li class="layui-nav-item">
-                    <a href="javascript:;" th:text="${user.getUsername()}">
+                    <a href="javascript:;" th:text="${user.getUsername()}" id="uname">
                     </a>
                     <!--                    <a href="javascript:;">个人中心</a>-->
                     <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                        <dd><a href="#">修改信息</a></dd>
+                        <dd><a onclick="change()">修改信息</a></dd>
                         <dd><a href="#">缴费</a></dd>
                         <dd><a onclick="signout()">退出</a></dd>
                     </dl>
@@ -78,7 +139,20 @@
                 </tr>
             </tbody>
         </table>
-        
+        <form class="layui-form" id="test" style="display:none">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input id="userName" type="text" name="userName" required lay-verify="required"th:value="${user.getUsername()}" autocomplete="on" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input id="password" type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="on" class="layui-input">
+                </div>
+            </div>
+        </form>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script>
             //注意：导航 依赖 element 模块，否则无法进行功能性操作

@@ -26,4 +26,10 @@ public class BookServiceImpl implements BookService {
        Book book=this.bookMapper.selPrice(id);
         return book;
     }
+
+    @Override
+    public List<Book> searchBook(String name) {
+        List<Book> list=this.bookMapper.searchBook(name);
+        return list;
+    }
 }

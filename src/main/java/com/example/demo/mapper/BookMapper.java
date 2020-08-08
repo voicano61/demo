@@ -22,6 +22,7 @@ public interface BookMapper {
     Book selPrice(int id);
     @Update("update book set number=number+1 where id=#{id}")
     void upNumber(int id);
-
+    @Select("select * from book where number>0 and (bookName like '%${name}%' or author like '%${name}%')")
+    List<Book> searchBook(String name);
 
 }

@@ -38,8 +38,8 @@ public interface UserMapper {
     @Update("<script>"+
             "update user"+
             "<set>"+
-            "<if test=\"username != null\">username=#{username},</if>"+
-            "<if test=\"password != null\">password=#{password}</if>"+
+            "<if test=\"username != null and username!=''\">username=#{username},</if>"+
+            "<if test=\"password != null and password!=''\">password=#{password}</if>"+
             "</set>"+
             "where id=#{id}"+
             "</script>")

@@ -10,4 +10,5 @@ public interface BookService {
     List<Book> selAllBook();
     List<Book> selBook();
     Book selPrice(int id);
+    List<Book> searchBook(String name);
 }

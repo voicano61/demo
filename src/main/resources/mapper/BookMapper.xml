@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.example.demo.pojo.Book">
         <result column="id" jdbcType="INTEGER" property="id" />
-        <result column="bookname" jdbcType="VARCHAR" property="bookname" />
+        <result column="bookName" jdbcType="VARCHAR" property="bookName" />
         <result column="author" jdbcType="VARCHAR" property="author" />
         <result column="number" jdbcType="VARCHAR" property="number" />
     </resultMap>
@@ -23,4 +23,7 @@
     <update id="upNumber" parameterType="Integer">
         update book set number=number+1 where id=#{id}
     </update>
+    <select id="searchBook" resultType="com.example.demo.pojo.Book" parameterType="String">
+        select * from book where number>0 and (author like '%${name}%' or bookName like '%${name}%')
+    </select>
 </mapper>

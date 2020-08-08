@@ -323,4 +323,26 @@ public class BookController {
         }
         return bookBean;
     }
+    @ResponseBody
+    @RequestMapping(value = "searchBook",method = RequestMethod.POST)
+    public BookBean searchBook(HttpServletRequest request) throws ParseException {
+        String token=request.getHeader("token");
+        String name=request.getParameter("name");
+        BookBean bookBean=new BookBean();
+        if(JWTUtils.verify(token))
+        {
+            List<Book> list=this.bookService.searchBook(name);
+            bookBean.setResultCode(200);
+            bookBean.setResultString("成功");
+            BookDataBean bookDataBean=new BookDataBean();
+            bookDataBean.setBook(list);
+            bookBean.setData(bookDataBean);
+        }
+        else
+        {
+            bookBean.setResultCode(500);
+            bookBean.setResultString("失败");
+        }
+        return bookBean;
+    }
 }
