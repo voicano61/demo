@@ -93,6 +93,7 @@
     <body>
         <div class="layui-header">
             <ul class="layui-nav" lay-filter="">
+                <li class="layui-nav-item" th:if="${user.getRole()==1}"><a href="">后台系统</a></li>
                 <li class="layui-nav-item layui-this"><a href="/test/showBook">借阅图书</a></li>
                 <li class="layui-nav-item"><a href="/test/myborrow">我的借阅</a></li>
                 <li class="layui-nav-item"><a href="/test/selRe">待归还</a></li>

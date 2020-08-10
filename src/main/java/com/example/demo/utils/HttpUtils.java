@@ -238,4 +238,53 @@ public class HttpUtils {
         Response response = client.newCall(request).execute();
         return response;
     }
+    public static Response searchBorrow(String token,String name) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("name", name)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/searchBorrow")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response searchRe(String token,String name) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("name", name)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/book/searchRe")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response allTransaction(String token,String state) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("state", state)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/transaction/allTransaction")
+                .post(body)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response admin(String token) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://localhost:8080/user/admin")
+                .post(okhttp3.internal.Util.EMPTY_REQUEST)
+                .header("token",token)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
 }

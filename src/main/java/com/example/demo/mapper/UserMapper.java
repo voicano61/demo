@@ -30,7 +30,7 @@ public interface UserMapper {
     @Select(" select * from user where username=#{username} and password=#{password}")
     List<User> selUser(User user);
     
-    @Insert("insert into user(username,password,role) values(#{username},#{password},#{role})")
+    @Insert("insert into user(username,password,role,money) values(#{username},#{password},#{role},#{money})")
     void insUser(User user);
     @Select("select * from user where username=#{username}")
     List<User> selByName(String username);

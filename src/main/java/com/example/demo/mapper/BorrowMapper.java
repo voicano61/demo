@@ -26,8 +26,10 @@ public interface BorrowMapper {
     void compensate(int id);
     @Update("update borrow set state=2,reBook=#{returnDate} where id=#{id}")
     void returnBook(Borrow book);
-    @Select("select * from borrow where state=0 or state=1")
-    List<Borrow> selRe();
-    @Select("select * from borrow where userId=#{userId} and (state=0 or state=1) AND (author LIKE '%#{name}%' or bookName LIKE '%#{name}%')")
-    List<Borrow> searchBorrow(@Param("userId") int userId,@Param("name")String name);
+    @Select("select * from borrow where userId=#{userId} and (state=0 or state=1)")
+    List<Borrow> selRe(int userId);
+    @Select("select * from borrow where userId=#{userId} and (bookName like '%${name}%' or author like '%${name}%')")
+    List<Borrow> searchBorrow(@Param("userId") int userId,@Param("name") String name);
+    @Select("select * from borrow where userId=#{userId} and (state=0 or state=1) and (bookName like '%${name}%' or author like '%${name}%')")
+    List<Borrow> searchRe(@Param("userId") int userId,@Param("name") String name);
 }

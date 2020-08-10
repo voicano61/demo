@@ -55,8 +55,20 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
-    public List<Borrow> selRe() {
-        List<Borrow> list=this.borrowMapper.selRe();
+    public List<Borrow> selRe(int userId) {
+        List<Borrow> list=this.borrowMapper.selRe(userId);
+        return list;
+    }
+
+    @Override
+    public List<Borrow> searchBorrow(int userId, String name) {
+        List<Borrow> list=this.borrowMapper.searchBorrow(userId,name);
+        return list;
+    }
+
+    @Override
+    public List<Borrow> searchRe(int userId, String name) {
+        List<Borrow> list=this.borrowMapper.searchRe(userId,name);
         return list;
     }
 

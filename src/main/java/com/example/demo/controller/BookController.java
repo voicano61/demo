@@ -309,7 +309,9 @@ public class BookController {
         BookBean bookBean=new BookBean();
         if(JWTUtils.verify(token))
         {
-            List<Borrow> list=this.borrowService.selRe();
+            DecodedJWT jwt = JWT.decode(token);
+            int userId=jwt.getClaim("id").asInt();
+            List<Borrow> list=this.borrowService.selRe(userId);
             bookBean.setResultCode(200);
             bookBean.setResultString("成功");
             BookDataBean bookDataBean=new BookDataBean();
@@ -336,6 +338,54 @@ public class BookController {
             bookBean.setResultString("成功");
             BookDataBean bookDataBean=new BookDataBean();
             bookDataBean.setBook(list);
+            bookBean.setData(bookDataBean);
+        }
+        else
+        {
+            bookBean.setResultCode(500);
+            bookBean.setResultString("失败");
+        }
+        return bookBean;
+    }
+    @ResponseBody
+    @RequestMapping(value = "searchBorrow",method = RequestMethod.POST)
+    public BookBean searchBorrow(HttpServletRequest request) throws ParseException {
+        String token=request.getHeader("token");
+        String name=request.getParameter("name");
+        BookBean bookBean=new BookBean();
+        if(JWTUtils.verify(token))
+        {
+            DecodedJWT jwt = JWT.decode(token);
+            int userId=jwt.getClaim("id").asInt();
+            List<Borrow> list=this.borrowService.searchBorrow(userId,name);
+            bookBean.setResultCode(200);
+            bookBean.setResultString("成功");
+            BookDataBean bookDataBean=new BookDataBean();
+            bookDataBean.setBorrows(list);
+            bookBean.setData(bookDataBean);
+        }
+        else
+        {
+            bookBean.setResultCode(500);
+            bookBean.setResultString("失败");
+        }
+        return bookBean;
+    }
+    @ResponseBody
+    @RequestMapping(value = "searchRe",method = RequestMethod.POST)
+    public BookBean searchRe(HttpServletRequest request) throws ParseException {
+        String token=request.getHeader("token");
+        String name=request.getParameter("name");
+        BookBean bookBean=new BookBean();
+        if(JWTUtils.verify(token))
+        {
+            DecodedJWT jwt = JWT.decode(token);
+            int userId=jwt.getClaim("id").asInt();
+            List<Borrow> list=this.borrowService.searchRe(userId,name);
+            bookBean.setResultCode(200);
+            bookBean.setResultString("成功");
+            BookDataBean bookDataBean=new BookDataBean();
+            bookDataBean.setBorrows(list);
             bookBean.setData(bookDataBean);
         }
         else

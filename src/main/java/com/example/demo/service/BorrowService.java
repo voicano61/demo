@@ -14,5 +14,7 @@ public interface BorrowService {
     void timeout(int id);
     void compensate(int id);
     void returnBook(Borrow book);
-    List<Borrow> selRe();
+    List<Borrow> selRe(int userId);
+    List<Borrow> searchBorrow(int userId,String name);
+    List<Borrow> searchRe(int userId,String name);
 }

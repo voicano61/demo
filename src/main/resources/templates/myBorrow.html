@@ -81,12 +81,29 @@
             });
         }
     </script>
+    <script>
+        function search() {
+            var name=document.getElementById("name").value
+            if(name!=null&&name!="")
+            {
+                window.location.href="http://localhost:8080/test/searchBorrow?name="+name;
+            }
+            else
+            {
+                window.location.href="http://localhost:8080/test/myborrow";
+            }
+        }
+    </script>
     <body>
         <div class="layui-header">
             <ul class="layui-nav" lay-filter="">
                 <li class="layui-nav-item"><a href="/test/showBook">借阅图书</a></li>
                 <li class="layui-nav-item layui-this"><a href="/test/myborrow">我的借阅</a></li>
                 <li class="layui-nav-item"><a href="/test/selRe">待归还</a></li>
+                <div class="layui-input-inline">
+                    <input type="text" name="search" placeholder="请输入书名或作者名" class="layui-input" id="name" style="color: #0C0C0C">
+                </div>
+                <button type="button" class="layui-btn" onclick="search()">搜索</button>
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item"><img src="../image/money.png" th:text="${user.getMoney()}"></li>

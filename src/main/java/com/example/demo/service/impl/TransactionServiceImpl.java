@@ -6,6 +6,8 @@ import com.example.demo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
     @Autowired 
@@ -14,4 +16,11 @@ public class TransactionServiceImpl implements TransactionService {
     public void add(Transaction transaction) {
         this.transactionMapper.add(transaction);
     }
+
+    @Override
+    public List<Transaction> allTransaction(int userId, int state) {
+        List<Transaction> list=this.transactionMapper.allTransaction(userId,state);
+        return list;
+    }
+
 }

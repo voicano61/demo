@@ -20,9 +20,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -110,7 +114,7 @@ public class UserController {
     
     //登录
     @ResponseBody
-    @RequestMapping(value = "login",method = RequestMethod.POST)
+    @RequestMapping(value = "login",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
     public UserBean login(String username,String password)
     {
         UserBean userBean=new UserBean();
@@ -147,11 +151,13 @@ public class UserController {
     
     //注册
     @ResponseBody
-    @RequestMapping(value = "register",method = RequestMethod.POST)
+    @RequestMapping(value = "register",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public UserBean register(HttpServletRequest request)
     {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
+        int role=Integer.parseInt(request.getParameter("role"));
+        int money=Integer.parseInt(request.getParameter("money"));
         UserBean userBean=new UserBean();
         if(!username.equals("")&&!password.equals(""))
         {
@@ -166,6 +172,8 @@ public class UserController {
                 User user=new User();
                 user.setUsername(username);
                 user.setPassword(password);
+                user.setRole(role);
+                user.setMoney(money);
                 user.setRole(0);
                 this.userService.insUser(user);
                 userBean.setResultCode(200);
@@ -331,6 +339,33 @@ public class UserController {
             this.userService.updateInfo(user);
             userBean.setResultCode(200);
             userBean.setResultString("success");
+        }
+        else
+        {
+            userBean.setResultCode(500);
+            userBean.setResultString("error");
+        }
+        return userBean;
+    }
+    @ResponseBody
+    @RequestMapping(value = "admin",method = RequestMethod.POST)
+    public UserBean admin(HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        UserBean userBean=new UserBean();
+        if(JWTUtils.verify(token)) {
+            DecodedJWT jwt = JWT.decode(token);
+            int role=jwt.getClaim("role").asInt();
+            if(role==1)
+            {
+                userBean.setResultCode(200);
+                userBean.setResultString("success");
+            }
+            else
+            {
+                userBean.setResultCode(300);
+                userBean.setResultString("没有管理员权限");
+            }
         }
         else
         {

@@ -14,7 +14,7 @@
 server:
   port: 8080
   tomcat:
-    uri-encoding: utf-8
+    uri-encoding: UTF-8
 # Actuator Web 访问端口
 #management.server.port=8081
 #
@@ -31,7 +31,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/test?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
   http:
     encoding:
       force: true

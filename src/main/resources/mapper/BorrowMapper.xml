@@ -31,7 +31,10 @@
         update borrow set state=2,reBook=#{returnDate} where id=#{id}
     </update>
     
-    <select id="selRe" resultType="com.example.demo.pojo.Borrow">
-        select * from borrow where state=0 or state=1
+    <select id="selRe" resultType="com.example.demo.pojo.Borrow" parameterType="Integer">
+        select * from borrow where userId=#{userId} and (state=0 or state=1)
+    </select>
+    <select id="searchBorrow" resultType="com.example.demo.pojo.Borrow">
+        select * from borrow where userId=#{userId} and (author like '%${name}%' or bookName like '%${name}%')
     </select>
 </mapper>
